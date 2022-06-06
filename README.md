@@ -16,48 +16,20 @@ Or from Github:
 https://github.com/challos/async_pycatbox
 ```
 
-## Usage
-
-
-```python
-token = '' # this is your token, and it will default to an empty string (which is fine for catbox) if not set
-
-uploader = Uploader(token=token)
-
-upload = uploader.upload(file_type='py', file_raw=open('catbox/catbox/catbox.py', 'rb').read())
-print(upload)
-```
-
-```
-
 ## Example
 
 ```python
-from pycatbox import Uploader
+from async_pycatbox import Uploader
+import asyncio
 
-uploader = Uploader(token='')
+uploader = Uploader()
 
-# single file
-def single():
-    upload = uploader.upload(file_type='py', file_raw=open('catbox/catbox/catbox.py', 'rb').read())
-    return upload
+async def main():
+    upload = await uploader.upload('py', open('test.py', 'rb').read())
+    print(upload)
 
-# multiple files
-def multiple(files):
-    log = []
-    for file in files:
-        extension = str(file).split('.')[-1]
-        upload = uploader.upload(file_type=extension, file_raw=open(file))
-        log.append(upload)
-    return log
-
-
-
-files = ['catbox.py', 'test.py']
-print(multiple(files))
-
-#{'code': 200, 'file': 'https://files.catbox.moe/abcd.py'}
-
+asyncio.run(main())
+# https://files.catbox.moe/bav6l3.py
 ```
 
 ## Contributing
