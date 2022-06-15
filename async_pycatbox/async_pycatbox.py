@@ -1,3 +1,4 @@
+import sys
 import aiohttp
 
 
@@ -18,7 +19,9 @@ class Uploader:
         self.token = token
         self.apiUrl = "https://catbox.moe/user/api.php"
 
-    async def upload(self, file_type: str = None, file_raw: bytes = None) -> str:
+    async def upload(
+        self, file_type: str = None, file_raw: bytes = None, quiet: bool = False
+    ) -> str:
         """
         For uploading a file to catbox.
 
@@ -30,6 +33,8 @@ class Uploader:
         file_raw : bytes, optional
             The raw bytes of the file (for example by using open with the 'rb' flag), by
             default None
+        quiet : bool, optional
+            Whether or not it should output an error upon an issue.
 
         Returns
         -------
@@ -46,6 +51,13 @@ class Uploader:
                 async with session.post(self.apiUrl, data=data) as response:
                     resp = response
                     text = await resp.text()
+                    if response.status > 299:
+                        if not quiet:
+                            print(
+                                "Error with uploading to catbox, status {} with text"
+                                " '{}'".format(response.status, text), file=sys.stderr
+                            )
+                        return None
                     return text
 
             return await post(data)
