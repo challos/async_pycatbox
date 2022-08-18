@@ -3,7 +3,7 @@ from setuptools import setup
 with open("README.md", encoding="utf-8") as f:
     long_description = f.read()
 
-version = "1.1.2"
+version = "1.1.3"
 
 setup(
     name="async_pycatbox",
