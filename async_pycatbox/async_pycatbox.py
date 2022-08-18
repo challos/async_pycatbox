@@ -51,11 +51,12 @@ class Uploader:
                 async with session.post(self.apiUrl, data=data) as response:
                     resp = response
                     text = await resp.text()
-                    if response.status > 299:
+                    if not response.ok:
                         if not quiet:
                             print(
                                 "Error with uploading to catbox, status {} with text"
-                                " '{}'".format(response.status, text), file=sys.stderr
+                                " '{}' and headers {}".format(response.status, text, response.headers),
+                                file=sys.stderr,
                             )
                         return None
                     return text
